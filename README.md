@@ -25,3 +25,4 @@ Now lets create an src folder for this project
 ```
     npm i
 ```
+`to install all the dependencies for this project`
