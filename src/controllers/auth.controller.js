@@ -83,3 +83,15 @@ export const login = asyncHandler( async (req, res) => {
 
     throw new customError("Password is incorrect", 400);
 })
+
+export const logout = asyncHandler( async (req, res) => {
+    res.cookie("token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true
+    })
+
+    res.status(200).json({
+        success: true,
+        message: "User has been Logged out"
+    })
+})
