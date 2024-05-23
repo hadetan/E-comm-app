@@ -4,7 +4,7 @@ creating a backend e-commerce appilaction
 First while creating this app I installed few basic packages
 
 ```
-    npm i express nodemon dotenv mongoose bcryptjs jsonwebtoken
+    npm i express nodemon dotenv mongoose bcryptjs jsonwebtoken cors cookie-parser
 ```
 
 After the installation was done I created a root file named as `index.js`, where we will just connect to our DB and handle our erros.
