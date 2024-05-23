@@ -36,6 +36,7 @@ const productSchema = mongoose.Schema(
             default: 0
         },
         collectionId: {
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Collection"
         }
     },
