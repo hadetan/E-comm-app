@@ -6,6 +6,8 @@ First while creating this app I installed few basic packages
 ```
     npm i express nodemon dotenv mongoose bcryptjs jsonwebtoken cors cookie-parser
 ```
+###### About CORS (Cross Origin Resource Path) in-depth
+###### [click here](https://blog.learncodeonline.in/web-security-cross-origin-resource-sharing-cors)
 
 After the installation was done I created a root file named as `index.js`, where we will just connect to our DB and handle our erros.
 
