@@ -19,7 +19,7 @@ Now lets create an src folder for this project
 
 - for our schema's we need to have a `models` folder, after creating it we will write our all needs of our database.
 
-- creating a `utils` folder is essential since in a business apps theres always an admin and user, there can always be more. so in this folder we will have a file where we will declare all the roles in an object.
+- creating a `utils` folder is essential since in a business apps theres always an admin and user, there can always be more. so in this folder we will have file's where we will declare all utilities
 
 ## If you are cloning this repo, just execute - 
 ```

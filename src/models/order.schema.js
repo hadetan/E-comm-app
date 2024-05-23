@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import orderStatus from "../utils/orderStatus";
+import userSchema from "./user.schema";
 
 const orderSchema = new mongoose.Schema(
     {
