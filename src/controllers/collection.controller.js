@@ -36,6 +36,42 @@ export const updateCollection = asyncHandler( async(req, res) => {
     });
 
     if (!updateCollection) {
-        throw new 
+        throw new customError("Collection not found to update", 400)
     }
-})
+
+    res.status(200).json({
+        success: true,
+        message: "Collection updated successfully",
+        updatedCollection
+    })
+});
+
+export const deleteCollection = asyncHandler( async(res, req) => {
+    const {id: collectionId} = req.params
+
+    const deletedCollection = await Collection.findById(collectionId);
+
+    if (!deleteCollection) {
+        throw new customError("Collection not found to delete", 404);
+    }
+
+    await deletedCollection.remove()
+
+    res.status(200).json({
+        success: true,
+        message: "Collection deleted successfully"
+    })
+});
+
+export const getAllCollections = asyncHandler( async(req, res) => {
+    const collections = await Collection.find();
+
+    if (!collections) {
+        throw new customError("No collection found", 404);
+    }
+
+    res.status(200).json({
+        success: true,
+        collections
+    })
+});
