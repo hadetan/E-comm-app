@@ -1,7 +1,7 @@
 // signup a new user 
 
-import asyncHandler from "../utils/asynchHandler"
-import customError from "../utils/customError"
+import asyncHandler from "../utils/asynchHandler.js"
+import customError from "../utils/customError.js"
 import User from "../models/user.schema.js"
 
 export const cookieOptions = {

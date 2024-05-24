@@ -4,7 +4,7 @@ creating a backend e-commerce appilaction
 First while creating this app I installed few basic packages
 
 ```
-    npm i express nodemon dotenv mongoose bcryptjs jsonwebtoken cors cookie-parser
+    npm i express nodemon dotenv mongoose bcryptjs jsonwebtoken cors cookie-parser aws-sdk formidable
 ```
 ###### About CORS (Cross Origin Resource Sharing) in-depth
 ###### [click here](https://blog.learncodeonline.in/web-security-cross-origin-resource-sharing-cors)
