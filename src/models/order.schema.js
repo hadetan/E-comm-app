@@ -34,7 +34,7 @@ const orderSchema = new mongoose.Schema(
             type: Number,
             required: true
         },
-        counpon: String,
+        coupon: String,
         transactionId: String,
         status: {
             type: String,
