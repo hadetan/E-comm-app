@@ -80,6 +80,7 @@ export const addProduct = asyncHandler( async(req, res) => {
         })
     }
 });
+//wrapped the code in one extra trycatch to make sure errors have been caught
 
 export const getAllProduct = asyncHandler( async(req, res) => {
     const products = await Product.find({});
@@ -234,5 +235,3 @@ export const deleteProduct = asyncHandler( async(req, res) => {
     })
 
 });
-
-//wrapped the code in one extra trycatch to make sure errors have been caught

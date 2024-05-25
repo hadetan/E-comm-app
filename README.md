@@ -32,3 +32,7 @@ Now lets create an src folder for this project and create all these folders insi
     npm i
 ```
 `to install all the dependencies for this project`
+
+
+side self note
+- coupon : add delete edit disable

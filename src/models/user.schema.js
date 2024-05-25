@@ -3,7 +3,7 @@ import authRoles from "../utils/authRoles.js";
 import bcrypt from "bcryptjs";
 import JWT from "jsonwebtoken";
 import config from "../config/index.js";
-import crypto, { generateKey } from "crypto";
+import crypto from "crypto";
 
 const userSchema = new mongoose.Schema(
     {
