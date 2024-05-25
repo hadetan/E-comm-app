@@ -36,7 +36,7 @@ export const updateCollection = asyncHandler( async(req, res) => {
     });
 
     if (!updateCollection) {
-        throw new customError("Collection not found to update", 400)
+        throw new customError("Collection not found to update", 404)
     }
 
     res.status(200).json({
@@ -55,7 +55,7 @@ export const deleteCollection = asyncHandler( async(res, req) => {
         throw new customError("Collection not found to delete", 404);
     }
 
-    await deletedCollection.remove()
+    await deletedCollection.remove();
 
     res.status(200).json({
         success: true,
