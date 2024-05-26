@@ -69,12 +69,12 @@ export const login = asyncHandler( async (req, res) => {
     }
 
     console.log(user)
-    const passwordMatched = await user.comparePassword(password);
+    const isPasswordMatched = await user.comparePassword(password)
 
-    if (passwordMatched) {
-        const token = user.getJWTtoken;
-        user.password = undefined;
-        res.cookie("token", token, cookieOptions);
+    if (isPasswordMatched) {
+        const token = user.getJWTtoken()
+        user.password = undefined
+        res.cookie("token", token, cookieOptions)
         return res.status(200).json({
             success: true,
             token,
