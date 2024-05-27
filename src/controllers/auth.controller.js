@@ -3,10 +3,15 @@
 import asyncHandler from "../utils/asynchHandler.js"
 import customError from "../utils/customError.js"
 import User from "../models/user.schema.js"
+import userSchema from "../models/user.schema.js"
 
 export const cookieOptions = {
     expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
     httpOnly: true
+}
+
+userSchema.methods = {
+    
 }
 
 /** 
@@ -62,13 +67,19 @@ export const login = asyncHandler( async (req, res) => {
         throw new customError("Please provide all the details", 400);
     }
 
-    const user = User.findOne({email}).select("+password");
+    const user = await User.findOne({email}).select("+password");
+
+
+    //same code but while using regex -
+    // const user = await User.findOne({ email }).select("+password").exec()
 
     if (!user) {
         throw new customError("Invalid user", 400);
     }
 
-    console.log(user.comparePassword)
+    console.log(user)
+    
+
     const isPasswordMatched = await user.comparePassword(password)
 
     if (isPasswordMatched) {
