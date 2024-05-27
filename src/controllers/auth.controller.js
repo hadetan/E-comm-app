@@ -62,13 +62,13 @@ export const login = asyncHandler( async (req, res) => {
         throw new customError("Please provide all the details", 400);
     }
 
-    const user = User.findOne({email}).select("+password")
+    const user = User.findOne({email}).select("+password");
 
     if (!user) {
         throw new customError("Invalid user", 400);
     }
 
-    console.log(user)
+    console.log(user.comparePassword)
     const isPasswordMatched = await user.comparePassword(password)
 
     if (isPasswordMatched) {
@@ -110,3 +110,26 @@ export const getProfile = asyncHandler( async (req, res) => {
     })
 });
 
+export const forgotPassword = asyncHandler( async(req, res) => {
+    const {email} = req.body;
+
+    if (!email) {
+        throw new customError("Email is required", 400);
+    }
+
+    const user = await User.findOne({email});
+
+    if (!user) {
+        throw new customError("User not found", 404);
+    }
+
+    const resetToken = user.generateForgotPasswordToken();
+
+    await user.save({validateBeforeSave: false});
+
+    const resetPasswordUrl = `${req.protocol}://${req.get("host")}/api/v1/auth/password/reset/${resetToken}`;
+
+    const message = `Your password reset token is as follows /n/n ${resetPasswordUrl} /n/n if this was not requested by you, please ignore this mail.`;
+
+    
+});

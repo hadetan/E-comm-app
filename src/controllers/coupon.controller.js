@@ -12,6 +12,11 @@ export const createCoupon = asyncHandler( async(req, res) => {
         throw new customError("Please provide coupon code and discount", 400);
     }
 
+    const existingCoupon = await Coupon.findOne({code});
+    if (existingCoupon) {
+        throw new customError("Coupon already exists", 400);
+    }
+
     const coupon = await Coupon.create({
         code,
         discount
