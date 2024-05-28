@@ -1,5 +1,8 @@
 import { Router } from "express";
 import v1Routes from "./v1/index.js"
+import cookieParser from "cookie-parser";
+import cors from "cors"
+
 
 const router = Router();
 
