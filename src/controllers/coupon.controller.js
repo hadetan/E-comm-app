@@ -40,6 +40,10 @@ export const updateCoupon = asyncHandler( async(req, res) => {
         runValidators: true
     });
 
+    if (action !== Boolean) {
+        throw new customError("Only boolean value is accepted", 400);
+    }
+
     if (!updatedCoupon) {
         throw new customError("Coupon not found to update", 404);
     }
@@ -65,37 +69,6 @@ export const deleteCoupon = asyncHandler( async(req, res) => {
         message: "Coupon deleted successfully",
     })
 });
-
-export const disableCoupon = asyncHandler( async(req, res) => {
-    const coupon = await Coupon.findOne({active})
-
-    if (!coupon) {
-        throw new customError("Invalid coupon", 400)
-    }
-
-    const disabledCoupon = coupon.active = false;
-
-    res.status(200).json({
-        success: true,
-        message: "Coupon disabled successfully"
-    })
-});
-
-export const enableCoupon = asyncHandler( async(req, res) => {
-    const coupon = await Coupon.findOne({active})
-
-    if (!coupon) {
-        throw new customError("Invalid coupon", 400)
-    }
-
-    const enabledCoupon = coupon.active = false;
-
-    res.status(200).json({
-        success: true,
-        message: "Coupon enabled successfully",
-        enabledCoupon
-    })
-})
 
 export const getAllCoupons = asyncHandler( async(req, res) => {
     const allCoupons = await Coupon.find();
