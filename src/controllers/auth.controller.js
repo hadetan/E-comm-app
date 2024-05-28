@@ -79,7 +79,7 @@ export const login = asyncHandler( async (req, res) => {
         throw new customError("Invalid user", 400);
     }
 
-    console.log(user)
+    // console.log(user)
     
 
     const isPasswordMatched = await user.comparePassword(password)

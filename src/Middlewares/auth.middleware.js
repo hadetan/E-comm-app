@@ -7,13 +7,12 @@ import customError from "../utils/customError.js";
 export const isLoggedIn = asyncHandler( async (req, res, next) => {
     let token;
 
-    if (req.cookie.token || (req.headers.authorization && req.headers.authorization.startsWith("Bearer"))) {
-        token = req.cookie.body || req.headers.authorization.split(" ")[1]
-        //token = "Bearer sdfosdfopjre3243klnac"
+    if (req.cookies.token || (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) ) {
+        token = req.cookies.token || req.headers.authorization.split(" ")[1]
     }
 
     if (!token) {
-        throw new customError("Not authorized to access this resource", 400)
+        throw new customError("Not authorized to access this resource", 401)
     }
 
     try {
@@ -23,7 +22,7 @@ export const isLoggedIn = asyncHandler( async (req, res, next) => {
         next();
 
     } catch (error) {
-        throw new customError("Not authorized to access this route", 400)
+        throw new customError("Not authorized to access this route", 401)
     }
 });
 
