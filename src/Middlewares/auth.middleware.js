@@ -14,7 +14,7 @@ export const isLoggedIn = asyncHandler( async (req, res, next) => {
         // token = "Bearer gbhnjm235r5hbnj"
     }
 
-    console.log(token);
+    // console.log(token);
     if (!token) {
         throw new customError("Not authorized to access this resource", 401);
     }

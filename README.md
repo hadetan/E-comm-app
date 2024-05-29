@@ -27,7 +27,7 @@ First while creating this app I installed few basic packages
 
 - `middlewares` here we will write logics which needs to execute before a certain activity.
 
-### For mail service I"m using [mailtrap](https://mailtrap.io/) 
+### For mail service I'm using [mailtrap](https://mailtrap.io/) 
 - Use the mail testing and configure it in your `config`, `.env` file and `utility` folder.
 
 ## If you are cloning this repo, just execute - 
