@@ -5,4 +5,4 @@ const orderStatus = {
     CANCELLED: "CANCELLED"
 }
 
-export default orderStatus
+export default orderStatus;

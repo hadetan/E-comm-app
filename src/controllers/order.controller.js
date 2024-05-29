@@ -4,6 +4,8 @@ import customError from "../utils/customError.js";
 import razorpay from "../config/razorpay.config.js";
 import Product from "../models/product.schema.js"
 import Coupon from "../models/coupon.schema.js"
+import mongoose from "mongoose";
+import orderStatus from "../utils/orderStatus.js";
 
 
 export const generateRazorpayOrderId = asyncHandler( async(req, res) => {
@@ -63,54 +65,119 @@ export const generateRazorpayOrderId = asyncHandler( async(req, res) => {
     };
 
     const order = await razorpay.orders.create(options);
-})
 
+    if (!order) {
+        throw new customError("Unable to generate order", 400);
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "Razorpay order id generated successfully",
+        order
+    })
+});
 
 export const createOrder = asyncHandler( async(req, res) => {
-    const {product, user, address, phoneNumber, amount} = req.body;
+    const {products, user, address, phoneNumber, amount, transactionId, coupon} = req.body;
+    const productVals = await Product.findById(product);
+
+    if (!productVals) {
+        throw new customError("Product not found", 404);
+    }
+
+    if (productVals.stock === 0) {
+        throw new customError("Product is out of stock", 400)
+    }
+
+    productVals.stock -= 1;
+    productVals.sold += 1;
+
+    await productVals.save()
 
     if (
-        !product ||
+        !products ||
         !user ||
         !address ||
         !phoneNumber ||
-        !amount
+        !amount || 
+        !transactionId
     ) {
         throw new customError("Please fill all the feilds", 400)
     }
 
     const order = Order.create({
-        product,
+        products,
         user,
         address,
         phoneNumber,
-        amount
+        amount,
+        transactionId,
+        coupon
     });
 
     res.status(200).json({
         success: true,
         message: "order created successfully",
-        order
+        order,
+        stock: productVals.stock,
+        sold: productVals.sold
     })
 });
 
-export const updateOrder = asyncHandler( async(req, res) => {
-    const {address, phoneNumber} = req.body;
+// getAllOrders: ADMIN
+export const getAllOrders = asyncHandler( async(req, res) => {
+    const orders = await Order.find();
+
+    if (!orders) {
+        throw new customError("No order found", 404);
+    }
+
+    res.status(200).json({
+        success: true,
+        orders
+    })
+});
+
+//getAllorders from a user
+export const getMyOrders = asyncHandler( async(req, res) => {
+    const {id: userId} = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        throw new customError("Invalid user id", 400);
+    }
+
+    const orders = await Order.find({userId: userId});
+
+    if (!orders.length) {
+        throw new customError("No order found for this user", 404);
+    }
+
+    res.status(200).json({
+        success: true,
+        orders
+    })
+});
+
+//update for admins
+export const updateOrderStatus = asyncHandler( async(req, res) => {
+    const {status} = req.body;
     const {id: orderId} = req.params;
 
     if (
-        !address ||
-        !phoneNumber
+        !status
     ) {
-        throw new customError("Please fill all the feilds", 400)
+        throw new customError("Please fill the feild", 400)
+    }
+
+    if (!Object.values(orderStatus).includes(status)) {
+        throw new customError("Invalid status value", 400)
     }
 
     let updatedOrder = await Order.findByIdAndUpdate(orderId, {
-        address,
-        phoneNumber
+        status
     }, {
         new: true,
-        runValidators: true
+        runValidators: false
     });
 
     if (!updatedOrder) {
@@ -140,16 +207,3 @@ export const deleteOrder = asyncHandler( async(req, res) => {
         message: "Order deleted successfully"
     })
 });
-
-export const getAllOrders = asyncHandler( async(req, res) => {
-    const orders = await Order.find();
-
-    if (!orders) {
-        throw new customError("No order found", 404);
-    }
-
-    res.status(200).json({
-        success: true,
-        orders
-    })
-})
