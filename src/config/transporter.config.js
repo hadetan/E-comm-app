@@ -1,6 +1,7 @@
 import nodemaler from "nodemailer";
 import config from "./index.js";
 
+//assinging configs to mail helper server
 const tranporter = nodemaler.createTransport({
     host: config.SMTP_MAIL_HOST,
     port: config.SMTP_MAIL_PORT,
@@ -11,4 +12,4 @@ const tranporter = nodemaler.createTransport({
     },
 });
 
-export default tranporter
+export default tranporter;

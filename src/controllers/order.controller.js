@@ -1,20 +1,17 @@
 import Order from "../models/order.schema.js";
 import asyncHandler from "../utils/asynchHandler.js";
 import customError from "../utils/customError.js";
-import razorpay from "../config/razorpay.config.js";
 import Product from "../models/product.schema.js"
 import Coupon from "../models/coupon.schema.js"
 import mongoose from "mongoose";
 import orderStatus from "../utils/orderStatus.js";
+import razorpay from "../config/razorpay.config.js";
 
 
-export const generateRazorpayOrderId = asyncHandler( async(req, res) => {
-    const {products, couponCode} = req.body;
+export const generateRazorpayOrderId = asyncHandler(async (req, res) => {
+    const { products, couponCode } = req.body;
 
-    if (
-        !products ||
-        products.lenght === 0
-    ) {
+    if (!products || products.length === 0) {
         throw new customError("No products found", 404);
     }
 
@@ -24,42 +21,37 @@ export const generateRazorpayOrderId = asyncHandler( async(req, res) => {
     let productPriceCalc = Promise.all(
         products.map(async (product) => {
             const {productId, count} = product;
-            const productFromDB = await Product.findById(productId);
-
+            const productFromDB = await Product.findById(productId)
             if (!productFromDB) {
-                throw new customError("Product not found", 404);
+                throw new customError("No product found", 400)
             }
-
             if (productFromDB.stock < count) {
                 return res.status(400).json({
-                    error: "Product is out of stock"
+                    error: "Product quantity not in stock"
                 })
             }
-
-            totalAmount += productFromDB.price * count;
-
-            discountPercentage = await discountCalc(totalAmount);
-    
-            discount = totalAmount * (discountPercentage / 100)
-    
-            discountAmount += totalAmount - discount;
+            totalAmount += productFromDB.price * count
         })
     )
 
     async function discountCalc(couponCode) {
-        const coupon = await Coupon.findOne({ code: couponCode, active: true});
+        const coupon = await Coupon.findOne({ code: couponCode, active: true });
 
         if (!coupon) {
             return 0;
         }
 
-        return coupon.discount
+        return coupon.discount;
     }
 
     await productPriceCalc;
 
+    const discountPercentage = await discountCalc(couponCode);
+    discountAmount = totalAmount * (discountPercentage / 100);
+    const finalAmount = totalAmount - discountAmount;
+
     const options = {
-        amount: Math.round(totalAmount * 100),
+        amount: Math.round(finalAmount * 100),
         currency: "INR",
         receipt: `receipt_${new Date().getTime()}`
     };
@@ -74,12 +66,12 @@ export const generateRazorpayOrderId = asyncHandler( async(req, res) => {
         success: true,
         message: "Razorpay order id generated successfully",
         order
-    })
+    });
 });
 
 export const createOrder = asyncHandler( async(req, res) => {
     const {products, user, address, phoneNumber, amount, transactionId, coupon} = req.body;
-    const productVals = await Product.findById(product);
+    const productVals = await Product.findById(products);
 
     if (!productVals) {
         throw new customError("Product not found", 404);

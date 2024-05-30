@@ -4,7 +4,7 @@ dotenv.config();
 
 const config = {
     //port
-    PORT: process.env.PORT || 3000,
+    PORT: process.env.PORT || 5000,
 
     //mongodb connection
     MONGODB_URL: process.env.MONGODB_URL || "mongodb://localhost:27017/ecomm",
@@ -27,8 +27,10 @@ const config = {
     SMTP_SENDER_EMAIL: process.env.SMTP_SENDER_EMAIL,
 
     //razorpay
-    ROZORPAY_KEY_ID: process.env.ROZORPAY_KEY_ID,
-    ROZORPAY_SECRET: process.env.ROZORPAY_SECRET
+    RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID,
+    RAZORPAY_SECRET: process.env.RAZORPAY_SECRET
+
+    
 }
 
 export default config;

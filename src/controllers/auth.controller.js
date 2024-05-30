@@ -1,20 +1,13 @@
-// signup a new user 
-
-import asyncHandler from "../utils/asynchHandler.js"
-import customError from "../utils/customError.js"
-import User from "../models/user.schema.js"
-import userSchema from "../models/user.schema.js"
-import mailHelper from "../utils/mailHelper.js"
-// import cookieParser from "cookie-parser"
+import asyncHandler from "../utils/asynchHandler.js";
+import customError from "../utils/customError.js";
+import User from "../models/user.schema.js";
+import mailHelper from "../utils/mailHelper.js";
+// import cookieParser from "cookie-parser";
 
 export const cookieOptions = {
     expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
     httpOnly: true,
-}
-
-userSchema.methods = {
-    
-}
+};
 
 /** 
  * @SIGNUP
@@ -62,6 +55,14 @@ export const signup = asyncHandler( async (req, res) => {
     })
 });
 
+/** 
+ * @LOGIN
+ * @route http://localhost:5000/api/auth/login
+ * @description User login Controller for logging into existing user
+ * @returns User Object
+*/
+
+
 export const login = asyncHandler( async (req, res) => {
     const {email, password} = req.body;
 
@@ -71,10 +72,8 @@ export const login = asyncHandler( async (req, res) => {
     }
 
     const user = await User.findOne({email}).select("+password");
-
-
-    //same code but while using regex -
-    // const user = await User.findOne({ email }).select("+password").exec()
+    //same code but while using regex ->
+    // const user = await User.findOne({ email }).select("+password").exec();
 
     if (!user) {
         throw new customError("Invalid user", 400);
@@ -83,11 +82,11 @@ export const login = asyncHandler( async (req, res) => {
     // console.log(user)
     
 
-    const isPasswordMatched = await user.comparePassword(password)
+    const isPasswordMatched = await user.comparePassword(password);
 
     if (isPasswordMatched) {
-        const token = user.getJWTtoken()
-        user.password = undefined
+        const token = user.getJWTtoken();
+        user.password = undefined;
         res.cookie("token", token, cookieOptions)
         return res.status(200).json({
             success: true,
@@ -99,6 +98,14 @@ export const login = asyncHandler( async (req, res) => {
     throw new customError("Password is incorrect", 400);
 })
 
+/** 
+ * @LOGOUT
+ * @route http://localhost:5000/api/auth/logout
+ * @description User logout Controller for logging out of a user
+ * @returns Logout Message
+*/
+
+
 export const logout = asyncHandler( async (req, res) => {
     res.cookie("token", null, {
         expires: new Date(Date.now()),
@@ -109,7 +116,14 @@ export const logout = asyncHandler( async (req, res) => {
         success: true,
         message: "User has been Logged out"
     })
-})
+});
+
+/** 
+ * @PROFILE
+ * @route http://localhost:5000/api/auth/profile
+ * @description User profile Controller for getting profile
+ * @returns User Object
+*/
 
 export const getProfile = asyncHandler( async (req, res) => {
     const {user} = req;
@@ -124,7 +138,14 @@ export const getProfile = asyncHandler( async (req, res) => {
     })
 });
 
-export const forgotPassword = asyncHandler( async(req, res) => {
+/** 
+ * @FORTGOT_PASSWORD
+ * @route http://localhost:5000/api/auth/password/forgot
+ * @description User forgot password Controller for forgetting the password from DB
+ * @returns Long String Url For Redirecting
+*/
+
+export const forgotPassword = asyncHandler( async(req, _) => {
     const {email} = req.body;
 
     if (!email) {
@@ -150,9 +171,9 @@ export const forgotPassword = asyncHandler( async(req, res) => {
             email: user.email,
             subject: "Email to reset your password",
             message
-        }
+        };
 
-        await mailHelper({options})
+        await mailHelper({options});
     } catch (error) {
         user.forgotPasswordExpiry = undefined;
         user.forgotPasswordToken = undefined;
@@ -162,6 +183,13 @@ export const forgotPassword = asyncHandler( async(req, res) => {
         throw new customError(error.message || "Email could not be sent", 500);
     }
 });
+
+/** 
+ * @RESET_PASSWORD
+ * @route http://localhost:5000/api/auth/password/reset/:token
+ * @description User forgot password Controller for resetting the password from DB
+ * @returns User Object
+*/
 
 export const resetPassword = asyncHandler( async(req, res) => {
     const {token: resetToken} = req.params;
@@ -175,18 +203,18 @@ export const resetPassword = asyncHandler( async(req, res) => {
     }
 
     if (password !== confirmPassword) {
-        throw new customError("Password did not match with confirm password")
+        throw new customError("Password did not match with confirm password");
     }
 
     const resetPasswordToken = crypto
         .createHash("sha256")
         .update(resetToken)
-        .digest("hex")
+        .digest("hex");
 
     const user = await User.findOne({
         forgotPasswordToken: resetPasswordToken,
         forgotPasswordExpiry: { $gt : Date.now() }
-    })
+    });
 
     user.password = password;
     user.forgotPasswordToken = undefined;

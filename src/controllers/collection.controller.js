@@ -1,6 +1,13 @@
-import Collection from "../models/collection.schema.js"
-import asyncHandler from "../utils/asynchHandler.js"
-import customError from "../utils/customError.js"
+import Collection from "../models/collection.schema.js";
+import asyncHandler from "../utils/asynchHandler.js";
+import customError from "../utils/customError.js";
+
+/** 
+ * @CREATE_COLLECTION
+ * @route http://localhost:5000/api/collection/
+ * @description Creating Collection category
+ * @returns Created Collection Object
+*/
 
 export const createCollection = asyncHandler( async(req, res) => {
     const {name} = req.body;
@@ -18,7 +25,14 @@ export const createCollection = asyncHandler( async(req, res) => {
         message: "Collection name is added successfully",
         collection
     })
-})
+});
+
+/** 
+ * @UPDATE_COLLECTION
+ * @route http://localhost:5000/api/collection/:id
+ * @description Updating Collection category
+ * @returns Updated Collection Object
+*/
 
 export const updateCollection = asyncHandler( async(req, res) => {
     const {name} = req.body;
@@ -36,7 +50,7 @@ export const updateCollection = asyncHandler( async(req, res) => {
     });
 
     if (!updateCollection) {
-        throw new customError("Collection not found to update", 404)
+        throw new customError("Collection not found to update", 404);
     }
 
     res.status(200).json({
@@ -46,8 +60,15 @@ export const updateCollection = asyncHandler( async(req, res) => {
     })
 });
 
+/** 
+ * @DELETE_COLLECTION
+ * @route http://localhost:5000/api/collection/:id
+ * @description Deleting Collection category
+ * @returns Delete Message
+*/
+
 export const deleteCollection = asyncHandler( async(res, req) => {
-    const {id: collectionId} = req.params
+    const {id: collectionId} = req.params;
 
     const deletedCollection = await Collection.findById(collectionId);
 
@@ -63,7 +84,14 @@ export const deleteCollection = asyncHandler( async(res, req) => {
     })
 });
 
-export const getAllCollections = asyncHandler( async(req, res) => {
+/** 
+ * @GETTING_ALL_COLLECTIONS
+ * @route http://localhost:5000/api/collection/
+ * @description Getting All Collections category
+ * @returns Collections Object
+*/
+
+export const getAllCollections = asyncHandler( async(_, res) => {
     const collections = await Collection.find();
 
     if (!collections) {

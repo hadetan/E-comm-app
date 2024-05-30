@@ -47,8 +47,8 @@ userSchema.methods = {
     },
 
     //generating JWT token
-    getJWTtoken: async function(){
-        return await JWT.sign({_id: this._id, role: this.role}, config.JWT_SECRET, {
+    getJWTtoken: function(){
+        return JWT.sign({_id: this._id, role: this.role}, config.JWT_SECRET, {
             expiresIn: config.JWT_EXPIRY
         })
     },

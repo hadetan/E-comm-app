@@ -2,6 +2,13 @@ import Coupon from "../models/coupon.schema.js";
 import asyncHandler from "../utils/asynchHandler.js";
 import customError from "../utils/customError.js";
 
+/** 
+ * @CREATE_COUPON
+ * @route http://localhost:5000/api/coupon/
+ * @description Creating Coupon
+ * @returns Coupon Object
+*/
+
 export const createCoupon = asyncHandler( async(req, res) => {
     const {code, discount} = req.body;
 
@@ -29,6 +36,13 @@ export const createCoupon = asyncHandler( async(req, res) => {
     })
 });
 
+/** 
+ * @UPDATE_COUPON
+ * @route http://localhost:5000/api/coupon/:id
+ * @description Updating Coupon
+ * @returns Updated Coupon Object
+*/
+
 export const updateCoupon = asyncHandler( async(req, res) => {
     const {id: couponId} = req.params;
     const {action} = req.body;
@@ -55,6 +69,13 @@ export const updateCoupon = asyncHandler( async(req, res) => {
     })
 });
 
+/** 
+ * @DELETE_COUPON
+ * @route http://localhost:5000/api/coupon/:id
+ * @description Deleting Coupon
+ * @returns Delete Message
+*/
+
 export const deleteCoupon = asyncHandler( async(req, res) => {
     const {id: couponId} = req.params;
 
@@ -70,7 +91,14 @@ export const deleteCoupon = asyncHandler( async(req, res) => {
     })
 });
 
-export const getAllCoupons = asyncHandler( async(req, res) => {
+/** 
+ * @GET_ALL_COUPONS
+ * @route http://localhost:5000/api/coupon/
+ * @description Getting All Coupons
+ * @returns Coupons Object
+*/
+
+export const getAllCoupons = asyncHandler( async(_, res) => {
     const allCoupons = await Coupon.find();
 
     if (!allCoupons) {
@@ -81,4 +109,4 @@ export const getAllCoupons = asyncHandler( async(req, res) => {
         success: true,
         allCoupons
     })
-})
+});
