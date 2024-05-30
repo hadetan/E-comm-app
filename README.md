@@ -1,13 +1,37 @@
 # E-comm-app
 creating a backend e-commerce application
 
+## Technologies used in this project -
+- express
+- nodemon
+- dotenv
+- mongoose
+- bcryptjs
+- jsonwebtoken
+- cors
+- cookie-parser
+- aws-sdk
+- formidable
+- nodemailer
+- razorpay
+
+## If you are cloning this repo, just execute - 
+```
+    npm i
+```
+`to install all the dependencies for this project`
+
+### About CORS (Cross Origin Resource Sharing) in-depth
+###### [click here](https://blog.learncodeonline.in/web-security-cross-origin-resource-sharing-cors)
+
+### For mail service I'm using [mailtrap](https://mailtrap.io/) 
+- Use the mail testing and configure it in your `config`, `.env` file and `utility` folder.
+
 First while creating this app I installed few basic packages
 
 ```
     npm i express nodemon dotenv mongoose bcryptjs jsonwebtoken cors cookie-parser aws-sdk formidable nodemailer razorpay
 ```
-###### About CORS (Cross Origin Resource Sharing) in-depth
-###### [click here](https://blog.learncodeonline.in/web-security-cross-origin-resource-sharing-cors)
 
 ### After the installation was done I created a root file named as `index.js`, where we will just connect to our DB and handle our erros.
 
@@ -27,11 +51,5 @@ First while creating this app I installed few basic packages
 
 - `middlewares` here we will write logics which needs to execute before a certain activity.
 
-### For mail service I'm using [mailtrap](https://mailtrap.io/) 
-- Use the mail testing and configure it in your `config`, `.env` file and `utility` folder.
+- `routes` here we will write our routes for `post`, `put`, `get`, `delete`
 
-## If you are cloning this repo, just execute - 
-```
-    npm i
-```
-`to install all the dependencies for this project`
